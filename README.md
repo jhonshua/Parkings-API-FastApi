@@ -27,26 +27,34 @@ If you encourage contributions, outline the process for submitting code changes 
  Api/
     ├── .gitignore 
     |
+    ├── .requirements.txt 
+    |
     ├── README.MD
     |
     ├── main.py
     |
-    ├── venv
+    ├── vev/
     |
     ├── __pycache__
     │   
     ├── controllers/
-    │   ├── __init__.py
+    │   ├──  __pycache__
     │   └── user_controller.py
     |
     ├── models/
-    │   ├── __init__.py
     │   └── user_model.py
     |
     ├── routes/
-    │   ├── __init__.py
+    │   ├──  __pycache__
     │   └── user_routes.py
     |
+    |
+    ├── config/
+    │   ├── __init__.py
+    |   ├── db_config.py
+    |   ├── env_config_.py
+    │   └── general_config.py
+    |
     └── utils/
-        └── __init__.py
+        └── helper_functions.py
  

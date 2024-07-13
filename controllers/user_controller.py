@@ -1,4 +1,4 @@
-
+from models.user_model import UserCreate
 
 def get_all_users():
     # Lógica para obtener un usuario por ID desde la base de datos
