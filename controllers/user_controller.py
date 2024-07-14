@@ -44,10 +44,42 @@ def create_user(db: Session, user_data: UserSchema):
      db.refresh(_User)
      return _User
  
-def update_user(user_id: int, new_data: dict):
-    # Lógica para actualizar los datos de un usuario por ID en la base de datos
-    # Retorna un mensaje de éxito y un código de estado 202
-    return {"message": f"Usuario con ID {user_id} actualizado correctamente"}
+ 
+ 
+def update_user(db: Session, user_id: int, user_data: UserSchema):
+    user = get_user(db=db, user_id=user_id)
+   
+    full_name=user_data['full_name']
+    full_name_json = json.dumps(full_name)
+    username=user_data['username']
+    username_json = json.dumps(username)
+    email=user_data['email']
+    email_json = json.dumps(email)
+    password=user_data['password']
+    password_json = json.dumps(password)
+    phone=user_data['phone']
+    phone_json = json.dumps(phone)
+    status=user_data['status']
+    status_json = json.dumps(status)
+    rol_id=user_data['rol_id']
+    rol_id_json = json.dumps(rol_id)
+    ability=user_data['ability']
+    ability_json = json.dumps(ability)
+     
+    user.full_name=full_name_json,
+    user.username=username_json,
+    user.email=email_json,
+    user.password=password_json,
+    user.phone=phone_json,
+    user.status=status_json,
+    user.rol_id=rol_id_json,
+    user.ability=ability_json
+   
+    db.commit()
+    db.refresh(user)
+    return user
+   
+   
 
 def delete_user(db: Session, user_id: int) -> bool:
     user_to_delete = get_user(db=db, user_id=user_id)

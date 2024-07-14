@@ -97,8 +97,31 @@ async def create_single_user(body_data= Body(...), db: Session = Depends(get_db)
     
 # Actualizar un usuario por ID
 @router.put("/{user_id}")
-def update_single_user(user_id: int, new_data: dict):
-    return update_user(user_id, new_data)
+async def update_single_user(user_id: int, body_data= Body(...), db: Session = Depends(get_db)):
+    try:
+        user = update_user(db, user_id, user_data=body_data)
+        user_dicts = [
+            { 
+                'id': user.id,
+                'full_name': user.full_name.strip('"'),
+                'username': user.username.strip('"'),
+                'email': user.email.strip('"'),
+                'password': user.password.strip('"'),
+                'phone': user.phone.strip('"'),
+                'status': user.phone.strip('"'),
+                'rol_id': user.rol_id.strip('"'),
+                'ability': json.loads(user.ability)
+            }
+        ]
+        
+        return Response(status="Ok",
+                          code="200",
+                          message="User update successfully", result = user_dicts)
+        
+    except Exception as e:
+        return Response(status="Error",
+                          code="404",  
+                          message=f"User update failed{str(e)}")
 
 
 # Eliminar un usuario por ID
