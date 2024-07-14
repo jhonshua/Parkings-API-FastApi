@@ -4,7 +4,7 @@ from config.db_config import Base  # Assuming your declarative base class is her
 class User(Base):
     # Name of the table in the database
     __tablename__ = "User"
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, index=True)
     full_name = Column(String)
     username = Column(String, unique=True, index=True)
     email = Column(String, unique=True, index=True)
