@@ -1,26 +1,15 @@
-# Importamos las clases necesarias de SQLAlchemy
-from sqlalchemy import Boolean, Column, Integer, String
+from sqlalchemy import  Column, Integer, String, Text
+from config.db_config import Base  # Assuming your declarative base class is here
 
-# Importamos la clase base declarativa que definimos previamente en db_config.py
-from config.db_config import Base
-
-# Definimos la clase de modelo para los usuarios
 class User(Base):
-    # Nombre de la tabla en la base de datos
-    __tablename__ = "users"
-
-    # Columna para el ID (clave primaria)
+    # Name of the table in the database
+    __tablename__ = "User"
     id = Column(Integer, primary_key=True)
-
-    # Columna para el correo electrónico (único e indexado)
+    full_name = Column(String)
+    username = Column(String, unique=True, index=True)
     email = Column(String, unique=True, index=True)
-
-    # Columna para almacenar la contraseña hasheada
     password = Column(String)
-
-    # Columna para indicar si el usuario está activo (por defecto, True)
-    is_active = Column(Boolean, default=True)
-
-  
-
-
+    phone = Column(Text, nullable=True)  # Allows for longer phone numbers
+    status = Column(String)
+    rol_id = Column(String)
+    ability = Column(Text)

@@ -1,14 +1,11 @@
-from models.user_model import UserCreate
+from sqlalchemy.orm import Session
+from models.user_model import User
 
-def get_all_users():
-    # Lógica para obtener un usuario por ID desde la base de datos
-    # Retorna los detalles del usuario o un mensaje de error si no se encuentra
-    return {"message": "lista de todos los usarios"}
+def get_all_users(db: Session, skip: int = 0, limit: int = 100):
+   return db.query(User).offset(skip).limit(limit).all()
 
-def get_user(user_id: int):
-    # Lógica para obtener un usuario por ID desde la base de datos
-    # Retorna los detalles del usuario o un mensaje de error si no se encuentra
-    return {"message": f"Detalles del usuario con ID {user_id}"}
+def get_user(db: Session, user_id: int):
+     return db.query(User).filter(User.id == user_id).first()
 
 def create_user(user_data: dict):
     # Lógica para crear un usuario en la base de datos
@@ -21,7 +18,13 @@ def update_user(user_id: int, new_data: dict):
     # Retorna un mensaje de éxito y un código de estado 202
     return {"message": f"Usuario con ID {user_id} actualizado correctamente"}
 
-def delete_user(user_id: int):
-    # Lógica para eliminar un usuario por ID desde la base de datos
-    # Retorna un mensaje de éxito y un código de estado 200
-    return {"message": f"Usuario con ID {user_id} eliminado correctamente"}
+def delete_user(db: Session, user_id: int) -> bool:
+    user_to_delete = get_user(db=db, user_id=user_id)
+
+    if user_to_delete is None:
+        return False
+
+    db.delete(user_to_delete)
+    db.commit()
+
+    return True

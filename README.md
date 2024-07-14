@@ -22,6 +22,8 @@ uvicorn main:app --port 5000 --reload
 
 ## Contributing
 
+https://github.com/lemoncode21/fastapi-postgresql-crud
+
 If you encourage contributions, outline the process for submitting code changes or reporting issues.
 
  Api/
@@ -42,6 +44,7 @@ If you encourage contributions, outline the process for submitting code changes 
     │   └── user_controller.py
     |
     ├── models/
+    │   ├── __init__.py
     │   └── user_model.py
     |
     ├── routes/
@@ -56,5 +59,5 @@ If you encourage contributions, outline the process for submitting code changes 
     │   └── general_config.py
     |
     └── utils/
-        └── helper_functions.py
+        └── __init__.py
  

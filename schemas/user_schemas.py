@@ -1,17 +1,12 @@
 from pydantic import BaseModel
+from pydantic.generics import GenericModel
+from typing import Optional, Generic, TypeVar
 
-# Definimos una clase base para los esquemas de usuario
-class UserBase(BaseModel):
-    email: str
 
-# Definimos un esquema para la creación de usuarios (hereda de UserBase)
-class UserCreate(UserBase):
-    password: str
+T = TypeVar('T')
 
-# Definimos un esquema completo para los usuarios (hereda de UserBase)
-class User(UserBase):
-    id: int
-    is_active: bool
-
-    class Config:
-        orm_mode = True
+class Response(GenericModel, Generic[T]):
+    code: str
+    status: str
+    message: str
+    result: Optional[T] = None  
