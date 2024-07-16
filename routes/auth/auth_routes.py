@@ -37,12 +37,18 @@ async def user_login(body_data= Body(...),db: Session = Depends(get_db)):
         
 
     
-# salir de seccion usuario
+# salir de seccion usuario crear una lista negra de token no validos 
 @router.get("/logout")
-def user_logout():
-        return logout()
+async def  user_logout():
+        
+        token_user = logout()
+        return ResponseAuth(status="Ok", 
+                          code="200", 
+                          message="Session closed successfully", 
+                          token = token_user)
+                
     
-# reset pass
+# reset pass falata por hacer el end point
 @router.post("/reset")
 def pass_reset():
         return reset()

@@ -3,6 +3,7 @@ from models.user_model import User
 from config.db_config import SessionLocal
 from schemas.auth.auth_schemas import AuthSchema
 from passlib.context import CryptContext
+from fastapi import Cookie
 from dotenv import load_dotenv
 import os
 import json
@@ -54,9 +55,12 @@ def login(user_data: AuthSchema, db: Session) -> bool|str:
 
     
 #logout
-def logout() :
-    return print('hola mundo')
+def logout()-> str:
+    # Set the token to expire in the past (effectively invalidating it)
+    token = ""
+    return token
 
+  
 #reset pass
 
 def reset() :
