@@ -1,15 +1,19 @@
 from sqlalchemy.orm import Session
 from models.user_model import User
-from schemas.user_schemas import UserSchema
+from schemas.user.user_schemas import UserSchema
+from utils.helper_functions import get_password_hash
 import json
 
+#todos los usarios
 def get_all_users(db: Session, skip: int = 0, limit: int = 100):
     users = db.query(User).offset(skip).limit(limit).all()
     return users
 
+#un usuario por id
 def get_user(db: Session, user_id: int):
      return db.query(User).filter(User.id == user_id).first()
  
+#creamos usuario
 def create_user(db: Session, user_data: UserSchema):
     
      full_name=user_data['full_name']
@@ -19,7 +23,7 @@ def create_user(db: Session, user_data: UserSchema):
      email=user_data['email']
      email_json = json.dumps(email)
      password=user_data['password']
-     password_json = json.dumps(password)
+     password_hash = get_password_hash(password)
      phone=user_data['phone']
      phone_json = json.dumps(phone)
      status=user_data['status']
@@ -30,14 +34,14 @@ def create_user(db: Session, user_data: UserSchema):
      ability_json = json.dumps(ability)
      
      _User = User(
-        full_name=full_name_json,
-        username=username_json,
-        email=email_json,
-        password=password_json,
-        phone=phone_json,
-        status=status_json,
-        rol_id=rol_id_json,
-        ability=ability_json
+        full_name=full_name_json.strip('"'),
+        username=username_json.strip('"'),
+        email=email_json.strip('"'),
+        password= password_hash,
+        phone=phone_json.strip('"'),
+        status=status_json.strip('"'),
+        rol_id=rol_id_json.strip('"'),
+        ability=ability_json.strip('"')
     )
      db.add(_User)
      db.commit()
@@ -45,7 +49,7 @@ def create_user(db: Session, user_data: UserSchema):
      return _User
  
  
- 
+#actualizamos usuario 
 def update_user(db: Session, user_id: int, user_data: UserSchema):
     user = get_user(db=db, user_id=user_id)
    
@@ -80,13 +84,10 @@ def update_user(db: Session, user_id: int, user_data: UserSchema):
     return user
    
    
-
 def delete_user(db: Session, user_id: int) -> bool:
     user_to_delete = get_user(db=db, user_id=user_id)
-
     if user_to_delete is None:
         return False
-
     db.delete(user_to_delete)
     db.commit()
 

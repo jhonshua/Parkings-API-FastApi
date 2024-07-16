@@ -1,9 +1,11 @@
 from fastapi import APIRouter
 from fastapi import Depends, HTTPException, status,Body
 from sqlalchemy.orm import Session
-from controllers.user_controller import get_all_users, create_user, get_user, update_user, delete_user
+from controllers.user.user_controller import get_all_users, create_user, get_user, update_user, delete_user
 from config.db_config import SessionLocal
-from schemas.user_schemas import   Response
+from schemas.user.user_schemas import   Response 
+from middleware.validation.authenticate_user import authenticate_user
+from models.user_model import User
 import json
 
 router = APIRouter()
@@ -51,8 +53,6 @@ async def get_all_users_data(skip: int = 0, limit: int = 100, db: Session = Depe
             detail=f"Error retrieving user data: {str(e)}"
         )
 
-
-
 # Retorna un usuario específico por ID
 @router.get("/{user_id}")
 
@@ -90,7 +90,9 @@ async def create_single_user(body_data= Body(...), db: Session = Depends(get_db)
     try:
         # print(body_data)
         create_user(db, user_data=body_data)
-        return Response(status="Ok", code="200", message="created successfully").dict(exclude_none=True)
+        return Response(status="Ok", 
+                        code="200", 
+                        message="created successfully").dict(exclude_none=True)
     except Exception as e:
         return Response(status="Error ", code="500", message=str(e)).dict(exclude_none=True)
     
@@ -125,15 +127,20 @@ async def update_single_user(user_id: int, body_data= Body(...), db: Session = D
 
 
 # Eliminar un usuario por ID
+
 @router.delete("/{user_id}")
-async def delete_single_user(user_id: int, db: Session = Depends(get_db)):
+async def delete_single_user(user_id: int, current_user: User = Depends(authenticate_user), db: Session = Depends(get_db)):
     try:
         delete_user(db, user_id)
         return Response(status="Ok",
-                          code="200",
-                          message="User deleted successfully")
+                        code="200",
+                        message="User deleted successfully")
+    except HTTPException as e:
+        # Handle HTTP exceptions raised by the middleware or your logic
+        return e
     except Exception as e:
+        # Handle other unexpected errors
         return Response(status="Error",
-                          code="404",  
-                          message=f"User deletion failed{str(e)}")
+                        code="404",
+                        message=f"User deletion failed: {str(e)}")
 
