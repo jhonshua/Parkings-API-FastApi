@@ -1,7 +1,7 @@
 # middleware.py
 from fastapi import Request, HTTPException
 from sqlalchemy.orm import Session
-from models.user_model import User
+from models.user.user_model import User
 from config.db_config import SessionLocal  # Importa tu configuración de base de datos
 import jwt
 import os

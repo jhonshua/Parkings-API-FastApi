@@ -1,4 +1,4 @@
-from sqlalchemy import  Column, Integer, String, Text
+from sqlalchemy import  Column, ForeignKey, Integer, String, Text
 from config.db_config import Base  # Assuming your declarative base class is here
 
 class User(Base):
@@ -11,5 +11,5 @@ class User(Base):
     password = Column(String)
     phone = Column(Text, nullable=True)  # Allows for longer phone numbers
     status = Column(String)
-    rol_id = Column(String)
-    ability = Column(Text)
+    rol_id = Column(Integer, ForeignKey("roles.id"))  # Referencia al ID del rol
+   

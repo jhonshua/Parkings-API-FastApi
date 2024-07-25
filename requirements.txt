@@ -4,5 +4,7 @@ sqlalchemy==2.0.31
 psycopg2==24.1.2
 passlib[bcrypt]
 PyJWT
+SQLAlchemy
+SQLAlchemy-Utils
 
 

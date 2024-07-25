@@ -1,12 +1,16 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from models import user_model
+from models.user import user_model
+from models.rol  import rol_model
+from models.employees import employee_model
 from routes.user import user_routes
 from routes.auth import auth_routes
 from config.db_config import  engine
 
 # Creamos las tablas en la base de datos (si no existen)
 user_model.Base.metadata.create_all(bind=engine)
+employee_model.Base.metadata.create_all(bind=engine)
+rol_model.Base.metadata.create_all(bind=engine)
 
 # Inicializamos la aplicación FastAPI
 app = FastAPI()
@@ -26,7 +30,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
 
 # Incluimos las rutas relacionadas con los usuarios
 app.include_router(user_routes.router, prefix="/users", tags=["users"])

@@ -5,7 +5,7 @@ from controllers.user.user_controller import get_all_users, create_user, get_use
 from config.db_config import SessionLocal
 from schemas.user.user_schemas import   Response 
 from middleware.validation.authenticate_user import authenticate_user
-from models.user_model import User
+from models.user.user_model import User
 import json
 
 router = APIRouter()

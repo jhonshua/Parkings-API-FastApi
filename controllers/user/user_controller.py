@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from models.user_model import User
+from models.user.user_model import User
 from schemas.user.user_schemas import UserSchema
 from utils.helper_functions import get_password_hash
 import json
