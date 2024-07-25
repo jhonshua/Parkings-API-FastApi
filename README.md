@@ -24,40 +24,4 @@ uvicorn main:app --port 5000 --reload
 
 If you encourage contributions, outline the process for submitting code changes or reporting issues.
 
- Api/
-    ├── .gitignore 
-    |
-    ├── .requirements.txt 
-    |
-    ├── README.MD
-    |
-    ├── main.py
-    |
-    ├── vev/
-    |
-    ├── __pycache__/
-    │   
-    ├── controllers/
-    │   ├──  __pycache__
-    │   └── user_controller.py
-    |
-    ├── models/
-    │   ├── __init__.py
-    │   └── user_model.py
-    ├── schemas/
-    │   ├── __init__.py
-    │   └── user_model.py
-    |
-    ├── routes/
-    │   ├──  __pycache__
-    │   └── user_schemas.py
-    |
-    ├── config/
-    │   ├── __init__.py
-    |   ├── db_config.py
-    |   ├── env_config_.py
-    │   └── general_config.py
-    |
-    └── utils/
-        └── __init__.py
  
