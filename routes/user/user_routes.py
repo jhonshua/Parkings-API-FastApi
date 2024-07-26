@@ -39,7 +39,6 @@ async def get_all_users_data(skip: int = 0, limit: int = 100, db: Session = Depe
                 'phone': user.phone.strip('"'),
                 'status': user.phone.strip('"'),
                 'rol_id': user.rol_id.strip('"'),
-                'ability': json.loads(user.ability)
             }
             for user in users
         ]
@@ -70,7 +69,6 @@ async def get_single_user(user_id: int, db: Session = Depends(get_db)):
                 'phone': user.phone.strip('"'),
                 'status': user.phone.strip('"'),
                 'rol_id': user.rol_id.strip('"'),
-                'ability': json.loads(user.ability)
             }
         ]
         
@@ -112,7 +110,6 @@ async def update_single_user(user_id: int, body_data= Body(...), db: Session = D
                 'phone': user.phone.strip('"'),
                 'status': user.phone.strip('"'),
                 'rol_id': user.rol_id.strip('"'),
-                'ability': json.loads(user.ability)
             }
         ]
         

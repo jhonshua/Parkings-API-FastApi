@@ -5,6 +5,7 @@ from models.rol  import rol_model
 from models.employees import employee_model
 from routes.user import user_routes
 from routes.auth import auth_routes
+from routes.rol import rol_routes
 from config.db_config import  engine
 
 # Creamos las tablas en la base de datos (si no existen)
@@ -34,4 +35,6 @@ app.add_middleware(
 # Incluimos las rutas relacionadas con los usuarios
 app.include_router(user_routes.router, prefix="/users", tags=["users"])
 app.include_router(auth_routes.router, prefix="/auth", tags=["auth"])
+app.include_router(rol_routes.router, prefix="/roles", tags=["roles"])
+
 

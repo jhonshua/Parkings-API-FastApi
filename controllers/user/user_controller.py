@@ -30,8 +30,7 @@ def create_user(db: Session, user_data: UserSchema):
      status_json = json.dumps(status)
      rol_id=user_data['rol_id']
      rol_id_json = json.dumps(rol_id)
-     ability=user_data['ability']
-     ability_json = json.dumps(ability)
+
      
      _User = User(
         full_name=full_name_json.strip('"'),
@@ -41,7 +40,6 @@ def create_user(db: Session, user_data: UserSchema):
         phone=phone_json.strip('"'),
         status=status_json.strip('"'),
         rol_id=rol_id_json.strip('"'),
-        ability=ability_json.strip('"')
     )
      db.add(_User)
      db.commit()
@@ -67,8 +65,7 @@ def update_user(db: Session, user_id: int, user_data: UserSchema):
     status_json = json.dumps(status)
     rol_id=user_data['rol_id']
     rol_id_json = json.dumps(rol_id)
-    ability=user_data['ability']
-    ability_json = json.dumps(ability)
+
      
     user.full_name=full_name_json,
     user.username=username_json,
@@ -76,8 +73,7 @@ def update_user(db: Session, user_id: int, user_data: UserSchema):
     user.password=password_json,
     user.phone=phone_json,
     user.status=status_json,
-    user.rol_id=rol_id_json,
-    user.ability=ability_json
+    user.rol_id=rol_id_json
    
     db.commit()
     db.refresh(user)
