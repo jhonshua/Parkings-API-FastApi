@@ -19,7 +19,7 @@ def get_db():
 
 # Retorna todos los usuarios
 @router.get("/")
-async def get_all_users_data(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+async def get_all_users_data(skip: int = 0, limit: int = 100, db: Session = Depends(get_db), current_user: User = Depends(authenticate_user)):
     try:
         users = get_all_users(db, skip=skip, limit=limit)
         if not users:
@@ -55,7 +55,7 @@ async def get_all_users_data(skip: int = 0, limit: int = 100, db: Session = Depe
 # Retorna un usuario específico por ID
 @router.get("/{user_id}")
 
-async def get_single_user(user_id: int, db: Session = Depends(get_db)):
+async def get_single_user(user_id: int, db: Session = Depends(get_db), current_user: User = Depends(authenticate_user)):
     try: 
         user= get_user(db, user_id)
         
@@ -84,7 +84,7 @@ async def get_single_user(user_id: int, db: Session = Depends(get_db)):
 
 # Crear un usuario
 @router.post("/")
-async def create_single_user(body_data= Body(...), db: Session = Depends(get_db)):
+async def create_single_user(body_data= Body(...), db: Session = Depends(get_db), current_user: User = Depends(authenticate_user)):
     try:
         # print(body_data)
         create_user(db, user_data=body_data)
@@ -97,7 +97,7 @@ async def create_single_user(body_data= Body(...), db: Session = Depends(get_db)
     
 # Actualizar un usuario por ID
 @router.put("/{user_id}")
-async def update_single_user(user_id: int, body_data= Body(...), db: Session = Depends(get_db)):
+async def update_single_user(user_id: int, current_user: User = Depends(authenticate_user),  body_data= Body(...), db: Session = Depends(get_db)):
     try:
         user = update_user(db, user_id, user_data=body_data)
         user_dicts = [
