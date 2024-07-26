@@ -8,6 +8,10 @@ def get_all_rol(db: Session, skip: int = 0, limit: int = 100):
     roles = db.query(Role).offset(skip).limit(limit).all()
     return roles
 
+#un usuario por id
+def get_rol(db: Session, rol_id: int):
+     return db.query(Role).filter(Role.id == rol_id).first()
+
 #creamos usuario
 def create_rol(db: Session, rol_data: RolSchema):
    
@@ -24,3 +28,13 @@ def create_rol(db: Session, rol_data: RolSchema):
     db.commit()
     db.refresh(_Role)
     return _Role
+
+#eliminar rol por id
+def delete_rol(db: Session, rol_id: int) -> bool:
+    rol_to_delete = get_rol(db=db, rol_id=rol_id)
+    if rol_to_delete is None:
+        return False
+    db.delete(rol_to_delete)
+    db.commit()
+
+    return True
