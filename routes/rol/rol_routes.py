@@ -2,7 +2,7 @@ from fastapi import APIRouter
 from sqlalchemy.orm import Session
 from fastapi import Depends, HTTPException, status,Body
 from schemas.roles.roles_schemas import   Response 
-from controllers.roles.roles_controller import get_all_rol, create_rol, delete_rol
+from controllers.roles.roles_controller import get_all_rol, create_rol, delete_rol, get_rol, update_rol
 from config.db_config import SessionLocal
 from middleware.validation.authenticate_user import authenticate_user
 
@@ -15,6 +15,7 @@ def get_db():
     finally:
         db.close()
 
+
 # Retorna todos los roles
 @router.get("/")
 async def get_all_roles_data(skip: int = 0, limit: int = 100, db: Session = Depends(get_db), token: str = Depends(authenticate_user)):
@@ -23,7 +24,7 @@ async def get_all_roles_data(skip: int = 0, limit: int = 100, db: Session = Depe
         if not roles:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,
-                detail="No users found in the database."
+                detail="No roles found in the database."
             )
 
         # Procesar los valores antes de incluirlos en la respuesta
@@ -44,6 +45,33 @@ async def get_all_roles_data(skip: int = 0, limit: int = 100, db: Session = Depe
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Error retrieving rol data: {str(e)}"
         )
+       
+        
+# Retorna un rol específico por ID
+@router.get("/{rol_id}")
+
+async def get_single_user(rol_id: int, db: Session = Depends(get_db), token: str = Depends(authenticate_user)):
+    try: 
+        roles = get_rol(db, rol_id)
+        
+        rol_dicts = [
+            {
+                'id': rol.id,
+                'name': rol.name,
+                'ability': rol.ability
+            }
+            for rol in roles
+        ]
+        
+        return Response(status="Ok",
+                          code="200",
+                          message="Rol search successfully", result = rol_dicts)
+        
+    except Exception as e:
+        return Response(status="Error",
+                          code="404",  
+                          message=f"Rol search failed{str(e)}")
+
 
 # Crear un rol
 @router.post("/")
@@ -55,6 +83,31 @@ async def create_single_rol(body_data = Body(...), db: Session = Depends(get_db)
                         message="created successfully").dict(exclude_none=True)
     except Exception as e:
         return Response(status="Error ", code="500", message=str(e)).dict(exclude_none=True)
+    
+    
+# Actualizar un rol por ID
+@router.put("/{user_id}")
+async def update_single_user(user_id: int, token: str = Depends(authenticate_user),  body_data= Body(...), db: Session = Depends(get_db)):
+    try:
+        rol = update_rol(db, user_id, user_data=body_data)
+        rol_dicts = [
+            {
+                'id': rol.id,
+                'name': rol.name,
+                'ability': rol.ability
+            }
+        ]
+        
+        return Response(status="Ok",
+                          code="200",
+                          message="Rol update successfully", result = rol_dicts)
+        
+    except Exception as e:
+        return Response(status="Error",
+                          code="404",  
+                          message=f"Rol update failed{str(e)}")    
+    
+    
     
 # Eliminar un rol por ID
 @router.delete("/{rol_id}")

@@ -3,16 +3,16 @@ from models.rol.rol_model import Role
 from schemas.roles.roles_schemas import RolSchema
 import json
 
-#todos los usarios
+#todos los roles
 def get_all_rol(db: Session, skip: int = 0, limit: int = 100):
     roles = db.query(Role).offset(skip).limit(limit).all()
     return roles
 
-#un usuario por id
+#un rol por id
 def get_rol(db: Session, rol_id: int):
      return db.query(Role).filter(Role.id == rol_id).first()
 
-#creamos usuario
+#creamos rol
 def create_rol(db: Session, rol_data: RolSchema):
    
     name = rol_data['name']
@@ -29,6 +29,24 @@ def create_rol(db: Session, rol_data: RolSchema):
     db.refresh(_Role)
     return _Role
 
+
+#actualizamos rol 
+def update_rol(db: Session, user_id: int, rol_data: RolSchema):
+    rol = get_rol(db=db, user_id=user_id)
+   
+    name = rol_data['name']
+    name_json = json.dumps(name)
+    ability_json  = rol_data['ability']
+  
+    rol.name = name_json,
+    rol.phone = ability_json,
+
+    db.commit()
+    db.refresh(rol)
+    return rol
+
+
+
 #eliminar rol por id
 def delete_rol(db: Session, rol_id: int) -> bool:
     rol_to_delete = get_rol(db=db, rol_id=rol_id)
@@ -38,3 +56,4 @@ def delete_rol(db: Session, rol_id: int) -> bool:
     db.commit()
 
     return True
+
