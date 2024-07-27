@@ -10,7 +10,8 @@ def get_all_rol(db: Session, skip: int = 0, limit: int = 100):
 
 #un rol por id
 def get_rol(db: Session, rol_id: int):
-     return db.query(Role).filter(Role.id == rol_id).first()
+    rol = db.query(Role).filter(Role.id == rol_id).first()
+    return rol
 
 #creamos rol
 def create_rol(db: Session, rol_data: RolSchema):

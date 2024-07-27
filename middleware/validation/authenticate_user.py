@@ -19,7 +19,6 @@ def authenticate_user(request: Request):
 
     try:
         token_type, token = authorization_header.split(" ")
-        print(token) 
         if token_type.lower() != "bearer":
             raise HTTPException(status_code=401, detail="Unauthorized: Invalid token type")
 

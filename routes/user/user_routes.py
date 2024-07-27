@@ -86,7 +86,6 @@ async def get_single_user(user_id: int, db: Session = Depends(get_db), current_u
 @router.post("/")
 async def create_single_user(body_data= Body(...), db: Session = Depends(get_db), current_user: User = Depends(authenticate_user)):
     try:
-        # print(body_data)
         create_user(db, user_data=body_data)
         return Response(status="Ok", 
                         code="200", 

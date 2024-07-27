@@ -53,15 +53,14 @@ async def get_all_roles_data(skip: int = 0, limit: int = 100, db: Session = Depe
 async def get_single_user(rol_id: int, db: Session = Depends(get_db), token: str = Depends(authenticate_user)):
     try: 
         roles = get_rol(db, rol_id)
-        
         rol_dicts = [
             {
-                'id': rol.id,
-                'name': rol.name,
-                'ability': rol.ability
+                'id': roles.id,
+                'name': roles.name,
+                'ability': roles.ability
             }
-            for rol in roles
         ]
+        
         
         return Response(status="Ok",
                           code="200",
