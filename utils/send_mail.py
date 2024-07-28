@@ -30,3 +30,18 @@ async def send_email(data: EmailSchema):
     fm = FastMail(conf)
     await fm.send_message(message)
     return  "Email sent successfully"
+
+
+async def send_email_password(data: EmailSchema):
+    
+    html = f"""<p>Thanks for using Fastapi-mail{data.password}</p> """
+
+    message = MessageSchema(
+        subject="Fastapi-Mail module",
+        recipients = [data.email],
+        body = html,
+        subtype = MessageType.html)
+
+    fm = FastMail(conf)
+    await fm.send_message(message)
+    return  "Email sent successfully"
