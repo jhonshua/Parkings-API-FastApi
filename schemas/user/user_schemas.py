@@ -25,7 +25,11 @@ class UserSchema(BaseModel):
     password: str
     phone: int
     status:str
-    rol_id:str
-    
+    rol_id:int
+
+class EmailSchema(BaseModel):
+    email: str
+    password: str
+       
 class RequestUser(BaseModel):
     parameter: UserSchema = Field(...)

@@ -6,5 +6,5 @@ passlib[bcrypt]
 PyJWT
 SQLAlchemy
 SQLAlchemy-Utils
-
+fastapi-mail
 

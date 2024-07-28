@@ -1,12 +1,12 @@
 from fastapi import APIRouter
-from fastapi import Depends, HTTPException, status,Body
+from fastapi import  Depends, HTTPException, status,Body
 from sqlalchemy.orm import Session
 from controllers.user.user_controller import get_all_users, create_user, get_user, update_user, delete_user
 from config.db_config import SessionLocal
-from schemas.user.user_schemas import   Response 
+from schemas.user.user_schemas import UserSchema,  Response, EmailSchema
 from middleware.validation.authenticate_user import authenticate_user
 from models.user.user_model import User
-import json
+from utils.send_mail import send_email
 
 router = APIRouter()
 
@@ -85,8 +85,15 @@ async def get_single_user(user_id: int, db: Session = Depends(get_db), current_u
 # Crear un usuario
 @router.post("/")
 async def create_single_user(body_data= Body(...), db: Session = Depends(get_db), current_user: User = Depends(authenticate_user)):
-    try:
-        create_user(db, user_data=body_data)
+    user_data = UserSchema(**body_data)
+    try:    
+        create_user( db, user_data )
+        data  = EmailSchema(
+            email =   user_data.email,
+            password =  user_data.password
+           )
+      
+        await send_email(data)
         return Response(status="Ok", 
                         code="200", 
                         message="created successfully").dict(exclude_none=True)

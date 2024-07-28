@@ -15,36 +15,21 @@ def get_user(db: Session, user_id: int):
  
 #creamos usuario
 def create_user(db: Session, user_data: UserSchema):
-    
-     full_name=user_data['full_name']
-     full_name_json = json.dumps(full_name)
-     username=user_data['username']
-     username_json = json.dumps(username)
-     email=user_data['email']
-     email_json = json.dumps(email)
-     password=user_data['password']
-     password_hash = get_password_hash(password)
-     phone=user_data['phone']
-     phone_json = json.dumps(phone)
-     status=user_data['status']
-     status_json = json.dumps(status)
-     rol_id=user_data['rol_id']
-     rol_id_json = json.dumps(rol_id)
-
      
-     _User = User(
-        full_name=full_name_json.strip('"'),
-        username=username_json.strip('"'),
-        email=email_json.strip('"'),
-        password= password_hash,
-        phone=phone_json.strip('"'),
-        status=status_json.strip('"'),
-        rol_id=rol_id_json.strip('"'),
+    _User = User(
+        full_name = user_data.full_name,
+        username = user_data.username,
+        email = user_data.email,
+        password = get_password_hash(user_data.password) ,
+        phone=user_data.phone,
+        status=user_data.status,
+        rol_id=user_data.rol_id,
     )
-     db.add(_User)
-     db.commit()
-     db.refresh(_User)
-     return _User
+    
+    db.add(_User)
+    db.commit()
+    db.refresh(_User)
+    return _User
  
  
 #actualizamos usuario 
