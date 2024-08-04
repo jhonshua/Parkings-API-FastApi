@@ -8,10 +8,10 @@ import os
 load_dotenv()  # Esto carga el archivo .env
 
 
-DATABASE_URL = os.getenv('DATABASE_URL')
+POSTGRES_SERVER_URL = os.getenv('POSTGRES_SERVER_URL')
 
 
-engine = create_engine(DATABASE_URL)
+engine = create_engine(POSTGRES_SERVER_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush = False, bind=engine)
 Base = declarative_base()
 

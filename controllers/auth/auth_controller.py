@@ -11,7 +11,7 @@ import json
 import datetime
 import jwt
 
-load_dotenv()  # Esto carga el archivo .env
+load_dotenv()  # Esto carga el archivo .env resolver esto segundo
 
 CLAVE = os.getenv('CLAVE_TOKEN')
 
@@ -24,7 +24,7 @@ def get_db():
         
 #login
 def login(user_data: AuthSchema, db: Session) -> bool|str:
-    #tengo que cambiar el diccionario que llega por un objeto
+    #tengo que cambiar el diccionario que llega por un objeto resolver esto primero
     email_to_search = json.dumps(user_data['email'])
     password_user = json.dumps(user_data['password']).strip('"')
     user = get_user_data(db, email_to_search.strip('"'))
@@ -59,11 +59,10 @@ def logout(data: InvalidTokenSchema, db: Session)-> str:
   
 #reset pass
 def reset(user_data: ResetPasswordRequest, db: Session) -> bool|str:
-    print("me ejecuto")
     email = user_data.email
     user = get_user_data(db, email)
     if user :
-        # tengo que generar un nuevo pass y enviarlo al correo
+        # tengo que generar un nuevo pass y enviarlo al correo resolver tercero la logica 
         # send_email_password(data = email)
         return True
     else:

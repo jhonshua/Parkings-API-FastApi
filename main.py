@@ -8,15 +8,15 @@ from routes.auth import auth_routes
 from routes.rol import rol_routes
 from config.db_config import  engine
 
-# Creamos las tablas en la base de datos (si no existen)
+#Creamos las tablas en la base de datos (si no existen)
 user_model.Base.metadata.create_all(bind=engine)
 employee_model.Base.metadata.create_all(bind=engine)
 rol_model.Base.metadata.create_all(bind=engine)
 
-# Inicializamos la aplicación FastAPI
+#Inicializamos la aplicación FastAPI
 app = FastAPI()
 
-# Lista de orígenes permitidos (ajústala según tus necesidades)
+#Lista de orígenes permitidos (ajústala según tus necesidades)
 origins = [
     "http://localhost.tiangolo.com",
     "https://localhost.tiangolo.com",
@@ -32,7 +32,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Incluimos las rutas relacionadas con los usuarios
+#Incluimos las rutas relacionadas con los usuarios
 app.include_router(user_routes.router, prefix="/users", tags=["users"])
 app.include_router(auth_routes.router, prefix="/auth", tags=["auth"])
 app.include_router(rol_routes.router, prefix="/roles", tags=["roles"])
