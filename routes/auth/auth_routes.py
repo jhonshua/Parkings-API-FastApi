@@ -53,7 +53,7 @@ async def  user_logout(request: Request, user_id: int, db: Session = Depends(get
                           )
                 
     
-# reset pass envia un correo con la clave provicional
+# reset pass envia un correo con la clave provisional
 @router.post("/reset")
 def pass_reset(body_data= Body(...),db: Session = Depends(get_db)):
         user_data = ResetPasswordRequest(**body_data)
