@@ -4,16 +4,16 @@ from schemas.user.user_schemas import UserSchema
 from utils.helper_functions import get_password_hash
 import json
 
-#todos los usarios
+#Todos los usuarios.
 def get_all_users(db: Session, skip: int = 0, limit: int = 100):
     users = db.query(User).offset(skip).limit(limit).all()
     return users
 
-#un usuario por id
+#Un usuario por ID.
 def get_user(db: Session, user_id: int):
      return db.query(User).filter(User.id == user_id).first()
  
-#creamos usuario
+#Creamos usuario.
 def create_user(db: Session, user_data: UserSchema):
      
     _User = User(
@@ -32,7 +32,7 @@ def create_user(db: Session, user_data: UserSchema):
     return _User
  
  
-#actualizamos usuario 
+#Actualizamos usuario.
 def update_user(db: Session, user_id: int, user_data: UserSchema):
     user = get_user(db=db, user_id=user_id)
    
@@ -64,7 +64,7 @@ def update_user(db: Session, user_id: int, user_data: UserSchema):
     db.refresh(user)
     return user
    
-   
+#Eliminamos usuario.
 def delete_user(db: Session, user_id: int) -> bool:
     user_to_delete = get_user(db=db, user_id=user_id)
     if user_to_delete is None:

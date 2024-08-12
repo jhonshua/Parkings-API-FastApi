@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 from config.db_config import SessionLocal
 from utils.helper_functions import verify_password, get_user_data
 from utils.send_mail import send_email_password
+from models.user.user_model import User
 from schemas.auth.auth_schemas import AuthSchema, InvalidTokenSchema,ResetPasswordRequest
 from models.token.invalid_token import InvalidToken
 
@@ -24,11 +25,10 @@ def get_db():
         
 #login
 def login(user_data: AuthSchema, db: Session) -> bool|str:
-    #tengo que cambiar el diccionario que llega por un objeto resolver esto primero
-    email_to_search = json.dumps(user_data['email'])
-    password_user = json.dumps(user_data['password']).strip('"')
-    user = get_user_data(db, email_to_search.strip('"'))
-    if user and verify_password(password_user, user.password):
+    
+    _login = AuthSchema(**user_data) 
+    user = get_user_data(db,_login.email)
+    if user and verify_password(_login.password, user.password):
         # Usuario existe y contraseña válida
         expiration = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(days=30)
         payload = {
@@ -36,9 +36,9 @@ def login(user_data: AuthSchema, db: Session) -> bool|str:
             "email":user.email,
             "exp": expiration,
         }
-        secret_key = CLAVE  # Cambia esto por una clave segura
+        secret_key = CLAVE 
         token = jwt.encode(payload, secret_key, algorithm="HS256")
-        return token  # Usuario existe y contraseña válida
+        return token  # Usuario existe y contraseña válida.
     else:
         return False  # Usuario no existe o contraseña incorrecta
  
@@ -60,7 +60,11 @@ def logout(data: InvalidTokenSchema, db: Session)-> str:
 #reset pass
 def reset(user_data: ResetPasswordRequest, db: Session) -> bool|str:
     email = user_data.email
+    
+    print(email)
+    
     user = get_user_data(db, email)
+    
     if user :
         # tengo que generar un nuevo pass y enviarlo al correo resolver tercero la logica 
         # send_email_password(data = email)

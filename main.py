@@ -7,6 +7,8 @@ from routes.user import user_routes
 from routes.auth import auth_routes
 from routes.rol import rol_routes
 from config.db_config import  engine
+from dotenv import load_dotenv
+import os
 
 #Creamos las tablas en la base de datos (si no existen)
 user_model.Base.metadata.create_all(bind=engine)
@@ -16,12 +18,13 @@ rol_model.Base.metadata.create_all(bind=engine)
 #Inicializamos la aplicación FastAPI
 app = FastAPI()
 
+load_dotenv() 
+
+CORS_ORIGINS = os.getenv('CORS_ORIGINS')
+
 #Lista de orígenes permitidos (ajústala según tus necesidades)
 origins = [
-    "http://localhost.tiangolo.com",
-    "https://localhost.tiangolo.com",
-    "http://localhost",
-    "http://localhost:8080",
+   CORS_ORIGINS
 ]
 
 app.add_middleware(
