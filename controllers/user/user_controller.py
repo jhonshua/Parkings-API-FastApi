@@ -2,6 +2,7 @@ from sqlalchemy.orm import Session
 from models.user.user_model import User
 from schemas.user.user_schemas import UserSchema
 from utils.helper_functions import get_password_hash
+from utils.send_mail import send_email_password
 import json
 
 #Todos los usuarios.

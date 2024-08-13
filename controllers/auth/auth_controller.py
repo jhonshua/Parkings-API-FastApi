@@ -8,7 +8,6 @@ from models.token.invalid_token import InvalidToken
 
 from dotenv import load_dotenv
 import os
-import json
 import datetime
 import jwt
 
@@ -59,15 +58,13 @@ def logout(data: InvalidTokenSchema, db: Session)-> str:
   
 #reset pass
 def reset(user_data: ResetPasswordRequest, db: Session) -> bool|str:
+    
     email = user_data.email
-    
-    print(email)
-    
-    user = get_user_data(db, email)
-    
+    user = get_user_data(db, email)    
     if user :
-        # tengo que generar un nuevo pass y enviarlo al correo resolver tercero la logica 
-        # send_email_password(data = email)
+        
+        
+     
         return True
     else:
         return False  # Usuario no existe o contraseña incorrecta
