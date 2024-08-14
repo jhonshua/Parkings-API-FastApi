@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 from config.db_config import SessionLocal
 from utils.helper_functions import verify_password, get_user_data
-from utils.send_mail import send_email_password
+from utils.send_mail import send_email
 from models.user.user_model import User
 from schemas.auth.auth_schemas import AuthSchema, InvalidTokenSchema,ResetPasswordRequest
 from models.token.invalid_token import InvalidToken
