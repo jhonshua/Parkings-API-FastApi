@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 from models.user.user_model import User
-from schemas.user.user_schemas import EmailSchema, UserSchema
+from schemas.user.user_schemas import EmailSchema, UserSchema, New_userSchema
 from utils.helper_functions import get_password_hash
 from utils.send_mail import send_email
 import json
@@ -29,13 +29,9 @@ def create_user(db: Session, user_data: UserSchema):
     
     db.add(_User)
     db.commit()
-    db.refresh(_User)
-    
-    send_email(
-        data=EmailSchema(email=user_data.email,password=user_data.password),
-        template_name="welcome", 
-        name=user_data.full_name
-    )
+    db.refresh(_User) 
+    data=New_userSchema(template = "new_user",email = user_data.email, password = user_data.password, name = user_data.full_name)
+    send_email(data)
     
     return _User
  
@@ -70,6 +66,9 @@ def update_user(db: Session, user_id: int, user_data: UserSchema):
    
     db.commit()
     db.refresh(user)
+    
+    
+    
     return user
    
 #Eliminamos usuario.

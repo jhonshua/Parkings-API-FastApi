@@ -1,5 +1,5 @@
 from fastapi_mail import ConnectionConfig, FastMail, MessageSchema, MessageType
-from schemas.user.user_schemas import EmailSchema
+from schemas.user.user_schemas import EmailSchema,  New_userSchema
 from email_templates.new_account import template_new_account
 from email_templates.rest_password import template_reset
 from dotenv import load_dotenv
@@ -29,13 +29,14 @@ conf = ConnectionConfig(
     MAIL_SSL_TLS=SMTP_SSL_TLS,
 )
 
-async def send_email(data: EmailSchema,  template_name:str, name:str ):
+async def send_email(data: New_userSchema):
+    print("me ejecuto correo")
     try:
-        
-        if template_name == "new_user":
-            html = template_new_account (data.email, data.password, name)
+        if data.template == "new_user":
+            html = template_new_account (data.email, data.password, data.name)
         else:
-            html = template_reset ( data.password, name)
+           print("me ejecuto correo")
+           html = template_reset (data.password, data.name)
         message = MessageSchema(
             subject="Fastapi-Mail module",
             recipients=[data.email],

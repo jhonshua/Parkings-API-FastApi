@@ -30,6 +30,12 @@ class UserSchema(BaseModel):
 class EmailSchema(BaseModel):
     email: str
     password: str
+    
+class New_userSchema(BaseModel):
+    template: str
+    name: str 
+    email: str
+    password: str  
        
 class RequestUser(BaseModel):
     parameter: UserSchema = Field(...)

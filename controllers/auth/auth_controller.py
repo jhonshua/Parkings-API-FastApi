@@ -1,12 +1,13 @@
 from sqlalchemy.orm import Session
 from config.db_config import SessionLocal
 from utils.helper_functions import verify_password, get_user_data
-from utils.send_mail import send_email
 from models.user.user_model import User
 from schemas.auth.auth_schemas import AuthSchema, InvalidTokenSchema,ResetPasswordRequest
 from models.token.invalid_token import InvalidToken
-
+from schemas.user.user_schemas import  New_userSchema
+from utils.helper_functions import get_password_hash
 from dotenv import load_dotenv
+import random
 import os
 import datetime
 import jwt
@@ -60,12 +61,20 @@ def logout(data: InvalidTokenSchema, db: Session)-> str:
 def reset(user_data: ResetPasswordRequest, db: Session) -> bool|str:
     
     email = user_data.email
-    user = get_user_data(db, email)    
+    user = get_user_data(db, email)   
     if user :
-        
-        
-     
-        return True
+        number = random.randint(100000, 999999)
+        number_str = str(number)
+        new_password = get_password_hash(number_str) 
+        user.password = new_password 
+        db.commit()
+        db.refresh(user)
+        data = New_userSchema(
+                template="reset_email",
+                name = user.full_name, 
+                email = email, 
+                password = number_str)
+        return data
     else:
-        return False  # Usuario no existe o contraseña incorrecta
+        return False  
     
