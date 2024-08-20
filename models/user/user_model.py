@@ -9,7 +9,7 @@ class User(Base):
     username = Column(String, unique=True, index=True)
     email = Column(String, unique=True, index=True)
     password = Column(String)
-    phone = Column(Integer)  # Allows for longer phone numbers
-    status = Column(String)
-    rol_id = Column(Integer, ForeignKey("roles.id"))  # Referencia al ID del rol
-   
+    phone = Column(Integer)  
+    status = Column(Integer)
+    rol_id = Column(Integer, ForeignKey("roles.id")) 
+    

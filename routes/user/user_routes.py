@@ -19,26 +19,26 @@ def get_db():
 
 # Retorna todos los usuarios
 @router.get("/")
-async def get_all_users_data(skip: int = 0, limit: int = 100, db: Session = Depends(get_db), current_user: User = Depends(authenticate_user)):
+async def get_all_users_data(db: Session = Depends(get_db), skip: int = 0, limit: int = 100, sort: str = "asc", full_name: str = None, current_user: User = Depends(authenticate_user)):
     try:
-        users = get_all_users(db, skip=skip, limit=limit)
+        users = get_all_users(db, skip=skip, limit=limit, sort=sort,full_name=full_name)
         if not users:
             raise HTTPException(
-                status_code=status.HTTP_404_NOT_FOUND,
-                detail="No users found in the database."
+                status_code = status.HTTP_404_NOT_FOUND,
+                detail = "No users found in the database."
             )
 
         # Procesar los valores antes de incluirlos en la respuesta
         user_dicts = [
             {
                 'id': user.id,
-                'full_name': user.full_name.strip('"'),
-                'username': user.username.strip('"'),
-                'email': user.email.strip('"'),
-                'password': user.password.strip('"'),
-                'phone': user.phone.strip('"'),
-                'status': user.phone.strip('"'),
-                'rol_id': user.rol_id.strip('"'),
+                'full_name': user.full_name,
+                'username': user.username,
+                'email': user.email,
+                'password': user.password,
+                'phone': user.phone,
+                'status': user.status,
+                'rol_id': user.rol_id,
             }
             for user in users
         ]
@@ -62,13 +62,13 @@ async def get_single_user(user_id: int, db: Session = Depends(get_db), current_u
         user_dicts = [
             {
                 'id': user.id,
-                'full_name': user.full_name.strip('"'),
-                'username': user.username.strip('"'),
-                'email': user.email.strip('"'),
-                'password': user.password.strip('"'),
-                'phone': user.phone.strip('"'),
-                'status': user.phone.strip('"'),
-                'rol_id': user.rol_id.strip('"'),
+                'full_name': user.full_name,
+                'username': user.username,
+                'email': user.email,
+                'password': user.password,
+                'phone': user.phone,
+                'status': user.phone,
+                'rol_id': user.rol_id,
             }
         ]
         

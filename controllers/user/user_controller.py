@@ -6,9 +6,31 @@ from utils.send_mail import send_email
 import json
 
 #Todos los usuarios.
-def get_all_users(db: Session, skip: int = 0, limit: int = 100):
-    users = db.query(User).offset(skip).limit(limit).all()
-    return users
+from sqlalchemy import or_
+
+def get_all_users(db: Session, 
+                  skip: int = 0, 
+                  limit: int = 100, 
+                  sort: str = "asc", 
+                  full_name: str = None):
+
+    query = db.query(User)
+
+    # Si se proporciona un término de búsqueda, filtramos por nombre completo
+    if full_name:
+        query = query.filter(User.full_name.ilike(f"%{full_name}%"))
+
+    # Ordenamos los resultados según el criterio especificado
+    if sort:
+        if sort == "asc":
+            query = query.order_by(User.full_name.asc())
+        elif sort == "desc":
+            query.order_by(User.full_name.desc())
+
+    # Aplicamos paginación
+    return query.offset(skip).limit(limit).all()
+
+
 
 #Un usuario por ID.
 def get_user(db: Session, user_id: int):
@@ -23,7 +45,7 @@ def create_user(db: Session, user_data: UserSchema):
         email = user_data.email,
         password = get_password_hash(user_data.password) ,
         phone=user_data.phone,
-        status=user_data.status,
+        statu=user_data.statu,
         rol_id=user_data.rol_id,
     )
     
@@ -50,8 +72,8 @@ def update_user(db: Session, user_id: int, user_data: UserSchema):
     password_json = json.dumps(password)
     phone=user_data['phone']
     phone_json = json.dumps(phone)
-    status=user_data['status']
-    status_json = json.dumps(status)
+    statu=user_data['status']
+    status_json = json.dumps(statu)
     rol_id=user_data['rol_id']
     rol_id_json = json.dumps(rol_id)
 
