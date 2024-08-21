@@ -10,6 +10,5 @@ class User(Base):
     email = Column(String, unique=True, index=True)
     password = Column(String)
     phone = Column(Integer)  
-    status = Column(Integer)
     rol_id = Column(Integer, ForeignKey("roles.id")) 
     

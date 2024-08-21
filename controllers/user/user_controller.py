@@ -2,8 +2,6 @@ from sqlalchemy.orm import Session
 from models.user.user_model import User
 from schemas.user.user_schemas import EmailSchema, UserSchema, New_userSchema
 from utils.helper_functions import get_password_hash
-from utils.send_mail import send_email
-import json
 
 #Todos los usuarios.
 from sqlalchemy import or_
@@ -36,63 +34,51 @@ def get_all_users(db: Session,
 def get_user(db: Session, user_id: int):
      return db.query(User).filter(User.id == user_id).first()
  
+ 
+
 #Creamos usuario.
 def create_user(db: Session, user_data: UserSchema):
-     
+
     _User = User(
         full_name = user_data.full_name,
         username = user_data.username,
         email = user_data.email,
         password = get_password_hash(user_data.password) ,
         phone=user_data.phone,
-        statu=user_data.statu,
         rol_id=user_data.rol_id,
     )
     
     db.add(_User)
     db.commit()
     db.refresh(_User) 
-    data=New_userSchema(template = "new_user",email = user_data.email, password = user_data.password, name = user_data.full_name)
-    send_email(data)
     
     return _User
- 
+
  
 #Actualizamos usuario.
 def update_user(db: Session, user_id: int, user_data: UserSchema):
+    
+    
     user = get_user(db=db, user_id=user_id)
-   
-    full_name=user_data['full_name']
-    full_name_json = json.dumps(full_name)
-    username=user_data['username']
-    username_json = json.dumps(username)
-    email=user_data['email']
-    email_json = json.dumps(email)
-    password=user_data['password']
-    password_json = json.dumps(password)
-    phone=user_data['phone']
-    phone_json = json.dumps(phone)
-    statu=user_data['status']
-    status_json = json.dumps(statu)
-    rol_id=user_data['rol_id']
-    rol_id_json = json.dumps(rol_id)
+    if not user:
+        return None
+    if not user_data:
+        return None  
+    user.full_name = user_data.full_name if user_data.full_name is not None else user.full_name
+    user.username = user_data.username if user_data.username is not None else user.username
+    user.email = user_data.email if user_data.email is not None else user.email
+    user.password = get_password_hash(user_data.password) if user_data.password is not None else user.password
+    user.phone = user_data.phone if user_data.phone is not None else user.phone
+    user.rol_id = user_data.rol_id if user_data.rol_id is not None else user.rol_id
 
-     
-    user.full_name=full_name_json,
-    user.username=username_json,
-    user.email=email_json,
-    user.password=password_json,
-    user.phone=phone_json,
-    user.status=status_json,
-    user.rol_id=rol_id_json
-   
+    db.add(user)
     db.commit()
     db.refresh(user)
-    
-    
-    
+
     return user
    
+
+    
 #Eliminamos usuario.
 def delete_user(db: Session, user_id: int) -> bool:
     user_to_delete = get_user(db=db, user_id=user_id)

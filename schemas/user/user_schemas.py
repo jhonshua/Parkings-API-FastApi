@@ -24,7 +24,6 @@ class UserSchema(BaseModel):
     email: str
     password: str
     phone: int
-    statu:int
     rol_id:int
 
 class EmailSchema(BaseModel):

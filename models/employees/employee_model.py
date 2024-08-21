@@ -19,9 +19,9 @@ class Employee(Base):
     dateIn = Column(DateTime, nullable=True)
     dateOut = Column(DateTime, nullable=True)
     comments = Column(Text, nullable=True)  
-    emergency_contact_name = Column(String)
-    emergency_contact_relationship = Column(String)  
-    emergency_contact_phone_number = Column(String)
+    emergency_contact_name = Column(String, nullable=True)
+    emergency_contact_relationship = Column(String, nullable=True)  
+    emergency_contact_phone_number = Column(String, nullable=True)
 
  # Optional: Define a relationship with User
    #  user = relationship("User", back_populates="employee")

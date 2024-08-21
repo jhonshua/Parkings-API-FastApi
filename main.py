@@ -1,11 +1,15 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+
 from models.user import user_model
 from models.rol  import rol_model
 from models.employees import employee_model
+
 from routes.user import user_routes
 from routes.auth import auth_routes
 from routes.rol import rol_routes
+from routes.employees import employees_routes
+
 from config.db_config import  engine
 from dotenv import load_dotenv
 import os
@@ -39,5 +43,5 @@ app.add_middleware(
 app.include_router(user_routes.router, prefix="/users", tags=["users"])
 app.include_router(auth_routes.router, prefix="/auth", tags=["auth"])
 app.include_router(rol_routes.router, prefix="/roles", tags=["roles"])
-
+app.include_router(employees_routes.router, prefix="/employee", tags=["employee"])
 

@@ -7,7 +7,7 @@ from schemas.user.user_schemas import UserSchema,  Response, EmailSchema
 from middleware.validation.authenticate_user import authenticate_user
 from models.user.user_model import User
 from utils.send_mail import send_email
-
+#----------------------------------------------------------------------------------------------
 router = APIRouter()
 
 def get_db():
@@ -16,7 +16,7 @@ def get_db():
         yield db
     finally:
         db.close()
-
+#----------------------------------------------------------------------------------------------
 # Retorna todos los usuarios
 @router.get("/")
 async def get_all_users_data(db: Session = Depends(get_db), skip: int = 0, limit: int = 100, sort: str = "asc", full_name: str = None, current_user: User = Depends(authenticate_user)):
@@ -37,7 +37,6 @@ async def get_all_users_data(db: Session = Depends(get_db), skip: int = 0, limit
                 'email': user.email,
                 'password': user.password,
                 'phone': user.phone,
-                'status': user.status,
                 'rol_id': user.rol_id,
             }
             for user in users
@@ -52,6 +51,7 @@ async def get_all_users_data(db: Session = Depends(get_db), skip: int = 0, limit
             detail=f"Error retrieving user data: {str(e)}"
         )
 
+#----------------------------------------------------------------------------------------------
 # Retorna un usuario específico por ID
 @router.get("/{user_id}")
 
@@ -81,11 +81,12 @@ async def get_single_user(user_id: int, db: Session = Depends(get_db), current_u
                           code="404",  
                           message=f"User search failed{str(e)}")
     
-
+#----------------------------------------------------------------------------------------------   
 # Crear un usuario
 @router.post("/")
 async def create_single_user(body_data= Body(...), db: Session = Depends(get_db), current_user: User = Depends(authenticate_user)):
     user_data = UserSchema(**body_data)
+
     try:    
         create_user( db, user_data )
         data  = EmailSchema(
@@ -99,23 +100,27 @@ async def create_single_user(body_data= Body(...), db: Session = Depends(get_db)
                         message="created successfully").dict(exclude_none=True)
     except Exception as e:
         return Response(status="Error ", code="500", message=str(e)).dict(exclude_none=True)
-    
-    
+      
+#----------------------------------------------------------------------------------------------      
 # Actualizar un usuario por ID
 @router.put("/{user_id}")
-async def update_single_user(user_id: int, current_user: User = Depends(authenticate_user),  body_data= Body(...), db: Session = Depends(get_db)):
+async def update_single_user(user_id: int, body_data= Body(...), db: Session = Depends(get_db), current_user: User = Depends(authenticate_user)):
+    
+    user_data = UserSchema(**body_data)
     try:
-        user = update_user(db, user_id, user_data=body_data)
+        
+        user = update_user(db, user_id, user_data)
+        
         user_dicts = [
             { 
                 'id': user.id,
-                'full_name': user.full_name.strip('"'),
-                'username': user.username.strip('"'),
-                'email': user.email.strip('"'),
-                'password': user.password.strip('"'),
-                'phone': user.phone.strip('"'),
-                'status': user.phone.strip('"'),
-                'rol_id': user.rol_id.strip('"'),
+                'full_name': user.full_name,
+                'username': user.username,
+                'email': user.email,
+                'password': user.password,
+                'phone': user.phone,
+                'status': user.phone,
+                'rol_id': user.rol_id,
             }
         ]
         
@@ -128,7 +133,7 @@ async def update_single_user(user_id: int, current_user: User = Depends(authenti
                           code="404",  
                           message=f"User update failed{str(e)}")
 
-
+#----------------------------------------------------------------------------------------------
 # Eliminar un usuario por ID
 
 @router.delete("/{user_id}")

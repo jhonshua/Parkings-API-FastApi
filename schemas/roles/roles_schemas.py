@@ -16,7 +16,6 @@ class Ability(BaseModel):
     edit: bool
     delete: bool    
     
-
 class RolSchema(BaseModel):
     name: str
     ability: Ability  
