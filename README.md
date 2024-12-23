@@ -1,5 +1,7 @@
 # Project Name: Exchange-Rates-API-FastApi
 
+![Texto alternativo](assets/fastApi.png)
+
 ## Documentation
 
 http://127.0.0.1:8000/docs
