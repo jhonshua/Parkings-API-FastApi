@@ -14,4 +14,3 @@ POSTGRES_SERVER_URL = os.getenv('POSTGRES_SERVER_URL')
 engine = create_engine(POSTGRES_SERVER_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush = False, bind=engine)
 Base = declarative_base()
-

@@ -7,7 +7,7 @@ from config.db_config import SessionLocal  # Importa tu configuración de base d
 import jwt
 import os
 
-CLAVE = os.getenv('CLAVE_TOKEN')  # Obtén la clave secreta del entorno
+CLAVE = os.getenv('CLAVE_TOKEN').encode('utf-8')  # Obtén la clave secreta del entorno
 
 
 def get_user_data(db: Session, user_email: str):
@@ -28,11 +28,10 @@ def authenticate_user(request: Request):
     
     if invalid_token:
         raise HTTPException(status_code=401, detail="Unauthorized: Token blacklisted")
-    
+    print(token)
     try:
-             
         payload = jwt.decode(token, CLAVE, algorithms=["HS256"])
-        email = payload.get("email")  # Obtén el correo electrónico del token (puedes ajustar esto según tu payload)
+        email:str = payload.get("email")  # Obtén el correo electrónico del token (puedes ajustar esto según tu payload)
         user = get_user_data(db, email)
          
         if not user:
@@ -45,6 +44,7 @@ def authenticate_user(request: Request):
     except jwt.DecodeError:
         raise HTTPException(status_code=401, detail="Unauthorized: Invalid token")
     except Exception:
+        print(Exception)
         raise HTTPException(status_code=500, detail="Internal server error")
     
     finally:

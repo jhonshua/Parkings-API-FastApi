@@ -1,5 +1,6 @@
-from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.templating import Jinja2Templates
+from fastapi import FastAPI as FastAPI, Request
 
 from models.user import user_model
 from models.rol  import rol_model
@@ -39,9 +40,26 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Obtener los templates genericos 
+templates = Jinja2Templates(directory="templates")
+
+#repuesta para rutas no declaradas
+@app.exception_handler(404)
+async def custom_404_handler(request: Request, exc):
+    return templates.TemplateResponse("generic_template/404.html", {"request": request})
+
 #Incluimos las rutas relacionadas con los usuarios
 app.include_router(user_routes.router, prefix="/users", tags=["users"])
 app.include_router(auth_routes.router, prefix="/auth", tags=["auth"])
 app.include_router(rol_routes.router, prefix="/roles", tags=["roles"])
 app.include_router(employees_routes.router, prefix="/employee", tags=["employee"])
 
+#rutas pendientes por realizar 
+#reposrtes
+#gestion de pagos
+#Gestión de Estacionamientos
+#egresos
+#ingresos
+#gestion de plazas
+#incidencias
+#reportes

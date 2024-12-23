@@ -32,12 +32,13 @@ def login(user_data: AuthSchema, db: Session) -> bool|str:
         # Usuario existe y contraseña válida
         expiration = datetime.datetime.now(datetime.timezone.utc) + datetime.timedelta(days=30)
         payload = {
-            "sub": user.id,  # ID del usuario (puedes usar otro identificador único)
+            "sub": str(user.id),  # ID del usuario (puedes usar otro identificador único)
             "email":user.email,
             "exp": expiration,
         }
         secret_key = CLAVE 
         token = jwt.encode(payload, secret_key, algorithm="HS256")
+        
         return token  # Usuario existe y contraseña válida.
     else:
         return False  # Usuario no existe o contraseña incorrecta

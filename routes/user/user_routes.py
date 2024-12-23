@@ -20,6 +20,7 @@ def get_db():
 # Retorna todos los usuarios
 @router.get("/")
 async def get_all_users_data(db: Session = Depends(get_db), skip: int = 0, limit: int = 100, sort: str = "asc", full_name: str = None, current_user: User = Depends(authenticate_user)):
+ 
     try:
         users = get_all_users(db, skip=skip, limit=limit, sort=sort,full_name=full_name)
         if not users:
@@ -151,4 +152,3 @@ async def delete_single_user(user_id: int, current_user: User = Depends(authenti
         return Response(status="Error",
                         code="404",
                         message=f"User deletion failed: {str(e)}")
-

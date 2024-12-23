@@ -30,12 +30,12 @@ conf = ConnectionConfig(
 )
 
 async def send_email(data: New_userSchema):
-    print("me ejecuto correo")
+    
     try:
         if data.template == "new_user":
             html = template_new_account (data.email, data.password, data.name)
         else:
-           print("me ejecuto correo")
+          
            html = template_reset (data.password, data.name)
         message = MessageSchema(
             subject="Fastapi-Mail module",
